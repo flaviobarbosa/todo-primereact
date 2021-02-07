@@ -8,13 +8,19 @@ import 'primeflex/primeflex.css';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 
+const NEW_TODO = { title: '', done: false };
+
 const App = () => {
-  const [todo, setTodo] = useState({ title: '', done: false });
-  const [todos, setTodos] = useState([
-    { title: 'todo1', done: false },
-    { title: 'todo2', done: false },
-    { title: 'todo3', done: false },
-  ]);
+  const [todo, setTodo] = useState(NEW_TODO);
+  const [todos, setTodos] = useState([]);
+
+  const addTodo = (event) => {
+    if (event) event.preventDefault();
+
+    const newTotoList = [...todos, todo];
+    setTodo(NEW_TODO);
+    setTodos(newTotoList);
+  };
 
   return (
     <div className='p-grid p-dir-col'>
@@ -24,23 +30,26 @@ const App = () => {
         My TODOs
       </div>
       <div className='p-col'>
-        <div className='p-d-flex p-ai-center p-jc-center p-mb-4'>
-          <div className='p-mr-2'>
-            <InputText
-              type='text'
-              value={todo.title}
-              onchange={(e) => setTodo({ title: e.target.value, done: false })}
-            />
+        <form onsubmit={addTodo}>
+          <div className='p-d-flex p-ai-center p-jc-center p-mb-4'>
+            <div className='p-mr-2'>
+              <InputText
+                type='text'
+                value={todo.title}
+                onChange={(e) => setTodo({ title: e.target.value, done: false })}
+              />
+            </div>
+            <Button label='Save' onClick={addTodo} />
           </div>
-          <Button label='Save' />
-        </div>
+        </form>
         <div className='p-d-flex p-flex-column p-ai-center p-jc-center'>
           {todos.map((todo) => (
             <div
-              className='p-shadow-1 p-p-2 p-d-flex p-jc-between'
-              style={{ width: '500px', height: '3rem' }}>
-              <span>{todo.title}</span>
-              <Button icon='pi pi-check' className='p-button-rounded p-button-text ' />
+              key={todo.title}
+              className='p-shadow-1 p-d-flex p-jc-between'
+              style={{ width: '70%', height: '2.5rem' }}>
+              <span className='p-my-auto p-ml-2'>{todo.title}</span>
+              <Button icon='pi pi-check' className='p-button-rounded p-button-text p-my-auto' />
             </div>
           ))}
         </div>
