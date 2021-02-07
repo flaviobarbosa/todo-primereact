@@ -10,6 +10,7 @@ import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { ConfirmDialog } from 'primereact/confirmdialog';
 import { Toast } from 'primereact/toast';
+import { Accordion, AccordionTab } from 'primereact/accordion';
 
 const NEW_TODO = { id: '', title: '', done: false };
 
@@ -82,60 +83,74 @@ const App = () => {
             </div>
           </form>
           <div className='p-d-flex p-flex-column p-ai-center p-jc-center'>
-            {todos.filter((todo) => todo.done === false).length === 0 ? (
-              <span className='p-text-italic p-text-uppercase'>you're all done!</span>
-            ) : (
-              <>
-                {todos
-                  .filter((todo) => todo.done === false)
-                  .map((todo) => (
-                    <div
-                      key={todo.id}
-                      className='p-shadow-1 p-d-flex p-jc-between p-mb-1'
-                      style={{ width: '70%', height: '2.5rem' }}>
-                      <span className='p-my-auto p-ml-2'>{todo.title}</span>
-                      <div>
-                        <Button
-                          icon='pi pi-check'
-                          className='p-button-rounded p-button-text p-my-auto'
-                          onClick={() => markAsComplete(todo)}
-                        />
-                        <Button
-                          icon='pi pi-times'
-                          className='p-button-rounded p-button-text p-button-danger p-my-auto'
-                          onClick={() => removeTodo(todo)}
-                        />
-                        <ConfirmDialog
-                          visible={showRemoveDialog}
-                          onHide={() => setShowRemoveDialog(false)}
-                          message='Are you sure you want to proceed?'
-                          header='Confirmation'
-                          icon='pi pi-exclamation-triangle'
-                          accept={() => acceptRemoval()}
-                          reject={() => setShowRemoveDialog(false)}
-                        />
-                      </div>
-                    </div>
-                  ))}
-              </>
-            )}
-            <div className='p-mt-4' style={{ width: '70%' }}>
-              {todos
-                .filter((todo) => todo.done)
-                .sort((a, b) => a.doneAt - b.doneAt)
-                .map((todo) => (
-                  <div
-                    key={todo.id}
-                    className='p-shadow-1 p-d-flex p-jc-between p-mb-1'
-                    style={{ height: '2.5rem', backgroundColor: '#f8f9fa' }}>
-                    <span
-                      className='p-my-auto p-ml-2 p-text-light p-text-italic'
-                      style={{ textDecoration: 'line-through' }}>
-                      {todo.title}
-                    </span>
+            <Accordion multiple activeIndex={[0]} style={{ width: '90vw' }}>
+              <AccordionTab header='TODO'>
+                {todos.filter((todo) => todo.done === false).length === 0 ? (
+                  <div className='p-text-italic p-text-uppercase p-text-center'>
+                    you're all done!
                   </div>
-                ))}
-            </div>
+                ) : (
+                  <>
+                    {todos
+                      .filter((todo) => todo.done === false)
+                      .map((todo) => (
+                        <div
+                          key={todo.id}
+                          className='p-shadow-1 p-d-flex p-jc-between p-mb-1'
+                          style={{ height: '2.5rem' }}>
+                          <span className='p-my-auto p-ml-2'>{todo.title}</span>
+                          <div>
+                            <Button
+                              icon='pi pi-check'
+                              className='p-button-rounded p-button-text p-my-auto'
+                              onClick={() => markAsComplete(todo)}
+                            />
+                            <Button
+                              icon='pi pi-times'
+                              className='p-button-rounded p-button-text p-button-danger p-my-auto'
+                              onClick={() => removeTodo(todo)}
+                            />
+                            <ConfirmDialog
+                              visible={showRemoveDialog}
+                              onHide={() => setShowRemoveDialog(false)}
+                              message='Are you sure you want to proceed?'
+                              header='Confirmation'
+                              icon='pi pi-exclamation-triangle'
+                              accept={() => acceptRemoval()}
+                              reject={() => setShowRemoveDialog(false)}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                  </>
+                )}
+              </AccordionTab>
+              <AccordionTab header='DONE'>
+                {todos.filter((todo) => todo.done).length === 0 ? (
+                  <div className='p-text-italic p-text-uppercase p-text-center'>
+                    nothing done :(
+                  </div>
+                ) : (
+                  <>
+                    {todos
+                      .filter((todo) => todo.done)
+                      .sort((a, b) => a.doneAt - b.doneAt)
+                      .map((todo) => (
+                        <div
+                          key={todo.id}
+                          className='p-shadow-1 p-d-flex p-jc-between p-mb-1'
+                          style={{ height: '2.5rem', backgroundColor: '#f8f9fa' }}>
+                          <span
+                            className='p-my-auto p-ml-2 p-text-light p-text-italic'
+                            style={{ textDecoration: 'line-through' }}>
+                            {todo.title}
+                          </span>
+                        </div>
+                      ))}
+                  </>
+                )}
+              </AccordionTab>
+            </Accordion>
           </div>
         </div>
       </div>
